@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Carousel, Flex } from 'antd-mobile';
-import { getSwiper } from '../../api'
+import { getSwiper, getRentHouseGroup } from '../../api'
 
 import './index.scss'
 import nav1 from '../../assets/images/nav-1.png'
@@ -18,12 +18,19 @@ export default class Index extends Component {
     state = {
         swiperImgs: [],
         imgHeight: 212,
+        groupData: []
     }
     componentDidMount() {
-        getSwiper().then(res => {
-            this.setState({ swiperImgs: res.data.body })
-        })
-
+        this.getSwiper()
+        this.getRentHouseGroup()
+    }
+    async getSwiper() {
+        const { data: { body } } = await getSwiper()
+        this.setState({ swiperImgs: body })
+    }
+    async getRentHouseGroup() {
+        const { data: { body } } = await getRentHouseGroup()
+        this.setState({ groupData: body })
     }
     renderSwiper() {
         const { swiperImgs } = this.state
@@ -60,6 +67,22 @@ export default class Index extends Component {
                     {navData.map((item, index) =>
                         <Flex.Item key={index}><img src={item.imgSrc} alt='' /><p>{item.title}</p></Flex.Item>)}
                 </Flex>
+                <div className='rent-house-group'>
+                    <Flex justify='between' className='rent-house-title'>
+                        <h4>租房小组</h4> <span>更多</span>
+                    </Flex>
+                    <Flex justify='between' wrap='wrap' className='content' alignContent='between'>
+                        {this.state.groupData.map(item =>
+                            <Flex justify='between' className='rent-item' key={item.id}>
+                                <div>
+                                    <h5>{item.title}</h5>
+                                    {item.desc}
+                                </div>
+                                <img src={`http://localhost:8080${item.imgSrc}`} alt='' />
+                            </Flex>
+                        )}
+                    </Flex>
+                </div>
             </div>
         )
     }

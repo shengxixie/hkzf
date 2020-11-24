@@ -1,13 +1,58 @@
-.index .nav{
-    padding: 10px 0;
-    background-color: #fff;
-    .am-flexbox-item{
-        text-align: center;
-        img{
-            width: 48px;
+.index {
+    .nav {
+        padding: 10px 0;
+        background-color: #fff;
+
+        .am-flexbox-item {
+            text-align: center;
+
+            img {
+                width: 48px;
+            }
+
+            p {
+                margin: 7px 0 0 0
+            }
         }
-        p{
-            margin:7px 0 0 0
+    }
+
+    .rent-house-group {
+        padding: 0 10px;
+        background-color: #f5f6f5;
+
+        .rent-house-title {
+            padding: 15px 0 15px 10px;
+
+            h4 {
+                padding: 0;
+                margin: 0;
+            }
+        }
+
+        .content {
+            height: 180px;
+            font-size: 12px;
+            color: #999;
+            box-sizing: border-box;
+
+
+            .rent-item {
+                padding: 12px 13px 22px;
+                height: 85px;
+                width: 48.5%;
+                border-radius: 8px;
+                background-color: #fff;
+
+                h5 {
+                    margin: 0;
+                    color: #333;
+                    margin-bottom: 5px;
+                }
+
+                img {
+                    width: 55px;
+                }
+            }
         }
     }
 }
