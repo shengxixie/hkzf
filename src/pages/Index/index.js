@@ -7,6 +7,13 @@ import nav1 from '../../assets/images/nav-1.png'
 import nav2 from '../../assets/images/nav-2.png'
 import nav3 from '../../assets/images/nav-3.png'
 import nav4 from '../../assets/images/nav-4.png'
+
+const navData = [
+    { imgSrc: nav1, title: '整租' },
+    { imgSrc: nav2, title: '合租' },
+    { imgSrc: nav3, title: '地图找房' },
+    { imgSrc: nav4, title: '去出租' }
+]
 export default class Index extends Component {
     state = {
         swiperImgs: [],
@@ -35,7 +42,7 @@ export default class Index extends Component {
                         <img
                             src={`http://localhost:8080${val.imgSrc}`}
                             alt=""
-                            style={{ width: '100%', verticalAlign: 'top' }}
+                            style={{ width: '100%', height: this.state.imgHeight, verticalAlign: 'top' }}
                         />
                     </a>
                 ))}
@@ -50,10 +57,8 @@ export default class Index extends Component {
                     {this.renderSwiper()}
                 </div>
                 <Flex justify='around' className='nav'>
-                    <Flex.Item><img src={nav1} alt='' /><p>整租</p></Flex.Item>
-                    <Flex.Item><img src={nav2} alt='' /><p>合租</p></Flex.Item>
-                    <Flex.Item><img src={nav3} alt='' /><p>地图找房</p></Flex.Item>
-                    <Flex.Item><img src={nav4} alt='' /><p>去出租</p></Flex.Item>
+                    {navData.map((item, index) =>
+                        <Flex.Item key={index}><img src={item.imgSrc} alt='' /><p>{item.title}</p></Flex.Item>)}
                 </Flex>
             </div>
         )
