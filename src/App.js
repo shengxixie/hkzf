@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Link, HashRouter as Router, Redirect, Switch } from 'react-router-dom'
+import { Route, HashRouter as Router, Redirect, Switch } from 'react-router-dom'
 // import { Button } from 'antd-mobile'
 import Home from './pages/Home'
 import CityList from './pages/CityList'
