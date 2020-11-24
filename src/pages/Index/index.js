@@ -9,10 +9,10 @@ import nav3 from '../../assets/images/nav-3.png'
 import nav4 from '../../assets/images/nav-4.png'
 
 const navData = [
-    { imgSrc: nav1, title: '整租' },
-    { imgSrc: nav2, title: '合租' },
-    { imgSrc: nav3, title: '地图找房' },
-    { imgSrc: nav4, title: '去出租' }
+    { imgSrc: nav1, title: '整租', path: '/home/house' },
+    { imgSrc: nav2, title: '合租', path: '/home/house' },
+    { imgSrc: nav3, title: '地图找房', path: '/map' },
+    { imgSrc: nav4, title: '去出租', path: '/login' }
 ]
 export default class Index extends Component {
     state = {
@@ -25,6 +25,9 @@ export default class Index extends Component {
         this.getSwiper()
         this.getRentHouseGroup()
         this.getRentHouseNews()
+    }
+    handleJump(path) {
+        this.props.history.push(path)
     }
     async getSwiper() {
         const { data: { body } } = await getSwiper()
@@ -41,32 +44,41 @@ export default class Index extends Component {
     renderSwiper() {
         const { swiperImgs } = this.state
         if (swiperImgs.length) {
-            return <Carousel
-                autoplay
-                infinite
-                autoplayInterval={1000}
-            >
-                {this.state.swiperImgs.map(val => (
-                    <a
-                        key={val.id}
-                        href="http://www.alipay.com"
-                        style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
-                    >
-                        <img
-                            src={`http://localhost:8080${val.imgSrc}`}
-                            alt=""
-                            style={{ width: '100%', height: this.state.imgHeight, verticalAlign: 'top' }}
-                        />
-                    </a>
-                ))}
-            </Carousel>
+            return <div className='swiper-wrapper'>
+                <Flex className='search-wrapper' align='center'>
+                    <Flex className='search' align='center'>
+                        <div className='location'>
+                            广州<i className='iconfont icon-arrow' />
+                        </div>
+                        <div className='searchbar'>
+                            <i className='iconfont icon-seach' />请输入小区或地址
+                        </div>
+                    </Flex>
+                    <i className='iconfont icon-map' />
+                </Flex>
+                <Carousel
+                    autoplay
+                    infinite
+                    autoplayInterval={1000}
+                    className='swiper'
+                >
+                    {this.state.swiperImgs.map(val => (
+                        <div key={val.id}>
+                            <a href="#">
+                                <img src={`http://localhost:8080${val.imgSrc}`} alt="" />
+                            </a>
+                        </div>
+                    ))}
+                </Carousel>
+            </div>
+
         }
         return null
     }
     renderGroup() {
         return <Flex justify='between' wrap='wrap' className='content' alignContent='between'>
             {this.state.groupData.map(item =>
-                <Flex justify='between' className='rent-item' key={item.id}>
+                <Flex justify='between' className='rent-item' key={item.id} >
                     <div>
                         <h5>{item.title}</h5>
                         {item.desc}
@@ -98,7 +110,10 @@ export default class Index extends Component {
                 </div>
                 <Flex justify='around' className='nav'>
                     {navData.map((item, index) =>
-                        <Flex.Item key={index}><img src={item.imgSrc} alt='' /><p>{item.title}</p></Flex.Item>)}
+                        <Flex.Item key={index} onClick={this.handleJump.bind(this, item.path)}>
+                            <img src={item.imgSrc} alt='' />
+                            <p>{item.title}</p>
+                        </Flex.Item>)}
                 </Flex>
                 <div className='rent-house-group'>
                     <Flex justify='between' className='rent-house-title'>
