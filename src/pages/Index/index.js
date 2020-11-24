@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Carousel, Flex } from 'antd-mobile';
-import { getSwiper, getRentHouseGroup } from '../../api'
+import { getSwiper, getRentHouseGroup, getRentHouseNews } from '../../api'
 
 import './index.scss'
 import nav1 from '../../assets/images/nav-1.png'
@@ -18,11 +18,13 @@ export default class Index extends Component {
     state = {
         swiperImgs: [],
         imgHeight: 212,
-        groupData: []
+        groupData: [],
+        news: []
     }
     componentDidMount() {
         this.getSwiper()
         this.getRentHouseGroup()
+        this.getRentHouseNews()
     }
     async getSwiper() {
         const { data: { body } } = await getSwiper()
@@ -31,6 +33,10 @@ export default class Index extends Component {
     async getRentHouseGroup() {
         const { data: { body } } = await getRentHouseGroup()
         this.setState({ groupData: body })
+    }
+    async getRentHouseNews() {
+        const { data: { body } } = await getRentHouseNews()
+        this.setState({ news: body })
     }
     renderSwiper() {
         const { swiperImgs } = this.state
@@ -57,6 +63,33 @@ export default class Index extends Component {
         }
         return null
     }
+    renderGroup() {
+        return <Flex justify='between' wrap='wrap' className='content' alignContent='between'>
+            {this.state.groupData.map(item =>
+                <Flex justify='between' className='rent-item' key={item.id}>
+                    <div>
+                        <h5>{item.title}</h5>
+                        {item.desc}
+                    </div>
+                    <img src={`http://localhost:8080${item.imgSrc}`} alt='' />
+                </Flex>
+            )}
+        </Flex>
+    }
+    renderNews() {
+        return this.state.news.map(item =>
+            <Flex key={item.id} justify='between' className='news-item'>
+                <img src={`http://localhost:8080${item.imgSrc}`} alt='' />
+                <Flex direction='column' justify='between' className='content'>
+                    <h5>{item.title}</h5>
+                    <Flex justify='between' className='info'>
+                        <span>{item.from}</span>
+                        <span>{item.date}</span>
+                    </Flex>
+                </Flex>
+            </Flex>
+        )
+    }
     render() {
         return (
             <div className='index'>
@@ -71,17 +104,11 @@ export default class Index extends Component {
                     <Flex justify='between' className='rent-house-title'>
                         <h4>租房小组</h4> <span>更多</span>
                     </Flex>
-                    <Flex justify='between' wrap='wrap' className='content' alignContent='between'>
-                        {this.state.groupData.map(item =>
-                            <Flex justify='between' className='rent-item' key={item.id}>
-                                <div>
-                                    <h5>{item.title}</h5>
-                                    {item.desc}
-                                </div>
-                                <img src={`http://localhost:8080${item.imgSrc}`} alt='' />
-                            </Flex>
-                        )}
-                    </Flex>
+                    {this.renderGroup()}
+                </div>
+                <div className='news'>
+                    <h4>最新资讯</h4>
+                    {this.renderNews()}
                 </div>
             </div>
         )

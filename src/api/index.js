@@ -14,3 +14,12 @@ export function getRentHouseGroup() {
         }
     })
 }
+
+export function getRentHouseNews() {
+    return request({
+        url: '/home/news',
+        params: {
+            area: '88cff55c-aaa4-e2e0'
+        }
+    })
+}
