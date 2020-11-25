@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Carousel, Flex } from 'antd-mobile';
-import { getSwiper, getRentHouseGroup, getRentHouseNews } from '../../api'
+import { getSwiper, getRentHouseGroup, getRentHouseNews, getCityInfo } from '../../api'
 
 import './index.scss'
 import nav1 from '../../assets/images/nav-1.png'
@@ -19,26 +19,38 @@ export default class Index extends Component {
         swiperImgs: [],
         imgHeight: 212,
         groupData: [],
-        news: []
+        news: [],
+        cityInfo: null
     }
     componentDidMount() {
+        var myCity = new window.BMap.LocalCity();
+        myCity.get(result => {
+            var cityName = result.name;
+            this.getCityInfo(cityName)
+        });
         this.getSwiper()
-        this.getRentHouseGroup()
-        this.getRentHouseNews()
+        const { cityInfo } = this.state
+        const area = cityInfo ? cityInfo.value : '88cff55c-aaa4-e2e0'
+        this.getRentHouseGroup(area)
+        this.getRentHouseNews(area)
     }
     handleJump(path) {
         this.props.history.push(path)
+    }
+    async getCityInfo(city) {
+        const { data: { body } } = await getCityInfo(city)
+        this.setState({ cityInfo: body })
     }
     async getSwiper() {
         const { data: { body } } = await getSwiper()
         this.setState({ swiperImgs: body })
     }
-    async getRentHouseGroup() {
-        const { data: { body } } = await getRentHouseGroup()
+    async getRentHouseGroup(area) {
+        const { data: { body } } = await getRentHouseGroup(area)
         this.setState({ groupData: body })
     }
-    async getRentHouseNews() {
-        const { data: { body } } = await getRentHouseNews()
+    async getRentHouseNews(area) {
+        const { data: { body } } = await getRentHouseNews(area)
         this.setState({ news: body })
     }
     renderSwiper() {
@@ -48,7 +60,7 @@ export default class Index extends Component {
                 <Flex className='search-wrapper' align='center'>
                     <Flex className='search' align='center'>
                         <div className='location'>
-                            广州<i className='iconfont icon-arrow' />
+                            {this.state.cityInfo ? this.state.cityInfo.label : '北京'}<i className='iconfont icon-arrow' />
                         </div>
                         <div className='searchbar'>
                             <i className='iconfont icon-seach' />请输入小区或地址

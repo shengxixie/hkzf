@@ -6,20 +6,27 @@ export function getSwiper() {
     })
 }
 
-export function getRentHouseGroup() {
+export function getRentHouseGroup(area) {
     return request({
         url: '/home/groups',
         params: {
-            area: '88cff55c-aaa4-e2e0'
+            area
         }
     })
 }
 
-export function getRentHouseNews() {
+export function getRentHouseNews(area) {
     return request({
         url: '/home/news',
         params: {
-            area: '88cff55c-aaa4-e2e0'
+            area
         }
+    })
+}
+
+export function getCityInfo(city) {
+    return request({
+        url: '/area/info',
+        params: { name: city }
     })
 }
