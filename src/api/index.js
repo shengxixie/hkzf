@@ -30,3 +30,16 @@ export function getCityInfo(city) {
         params: { name: city }
     })
 }
+
+export function getCityList() {
+    return request({
+        url: '/area/city',
+        params: { level: 1 }
+    })
+}
+
+export function getHotCity() {
+    return request({
+        url: '/area/hot'
+    })
+}

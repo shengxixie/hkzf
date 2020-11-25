@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Carousel, Flex } from 'antd-mobile';
-import { getSwiper, getRentHouseGroup, getRentHouseNews, getCityInfo } from '../../api'
-
+import { getSwiper, getRentHouseGroup, getRentHouseNews } from '../../api'
+import getcity from '../../utils/getCityInfo'
 import './index.scss'
 import nav1 from '../../assets/images/nav-1.png'
 import nav2 from '../../assets/images/nav-2.png'
@@ -23,11 +23,7 @@ export default class Index extends Component {
         cityInfo: null
     }
     componentDidMount() {
-        var myCity = new window.BMap.LocalCity();
-        myCity.get(result => {
-            var cityName = result.name;
-            this.getCityInfo(cityName)
-        });
+        this.getCityInfo()
         this.getSwiper()
         const { cityInfo } = this.state
         const area = cityInfo ? cityInfo.value : '88cff55c-aaa4-e2e0'
@@ -37,9 +33,12 @@ export default class Index extends Component {
     handleJump(path) {
         this.props.history.push(path)
     }
-    async getCityInfo(city) {
-        const { data: { body } } = await getCityInfo(city)
-        this.setState({ cityInfo: body })
+    handleCityList() {
+        this.props.history.push('/citylist')
+    }
+    async getCityInfo() {
+        const city = await getcity()
+        this.setState({ cityInfo: city })
     }
     async getSwiper() {
         const { data: { body } } = await getSwiper()
@@ -59,7 +58,7 @@ export default class Index extends Component {
             return <div className='swiper-wrapper'>
                 <Flex className='search-wrapper' align='center'>
                     <Flex className='search' align='center'>
-                        <div className='location'>
+                        <div className='location' onClick={this.handleCityList.bind(this)}>
                             {this.state.cityInfo ? this.state.cityInfo.label : '北京'}<i className='iconfont icon-arrow' />
                         </div>
                         <div className='searchbar'>
